@@ -15,7 +15,7 @@ TXT_U="tput sgr 0 1"  # set underlined
 BASEDIR=$(dirname "`[[ $0 == /* ]] && echo "$0" || echo "${PWD}/${0#./}"`")
 
 # Define output directory if not defined yet
-[ -z "$STAGING_PREFIX" ] && STAGING_PREFIX=$BASEDIR/../../../../hookflash-staging
+[ -z "$STAGING_PREFIX" ] && STAGING_PREFIX=$BASEDIR/../../staging
 UNAME=$(uname)
 
 validate_before(){
