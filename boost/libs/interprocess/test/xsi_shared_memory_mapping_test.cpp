@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2004-2009. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2004-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -52,7 +52,7 @@ class xsi_shared_memory_remover
 
 inline std::string get_filename()
 {
-   std::string ret (detail::get_temporary_path());
+   std::string ret (ipcdetail::get_temporary_path());
    ret += "/";
    ret += test::get_process_id_name();
    return ret;
@@ -64,7 +64,7 @@ int main (int argc, char *argv[])
    const char *names[2] = { filename.c_str(), 0 };
 
    file_mapping::remove(names[0]);
-   {  detail::file_wrapper(create_only, names[0], read_write); }
+   {  ipcdetail::file_wrapper(create_only, names[0], read_write); }
    xsi_key key(names[0], 1);
    file_mapping::remove(names[0]);
    remove_shared_memory(key);
@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
                //Create a mapped region
                mapped_region region (mapping, read_write, 0, FileSize, 0);
 
-               //Fill two regions with a pattern   
+               //Fill two regions with a pattern
                unsigned char *filler = static_cast<unsigned char*>(region.get_address());
                for(std::size_t i = 0; i < FileSize; ++i){
                   *filler++ = static_cast<unsigned char>(i);

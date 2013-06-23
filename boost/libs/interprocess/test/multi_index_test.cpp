@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2006-2009. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2006-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -21,9 +21,18 @@
 
 #include <boost/interprocess/containers/string.hpp>
 
+//<-
+//Shield against external warnings
+#include <boost/interprocess/detail/config_external_begin.hpp>
+//->
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
+
+//<-
+#include <boost/interprocess/detail/config_external_end.hpp>
+//->
 
 using namespace boost::interprocess;
 namespace bmi = boost::multi_index;
@@ -60,6 +69,9 @@ struct employee
 struct id{};
 struct age{};
 struct name{};
+
+namespace boost {
+namespace multi_index {
 
 // Explicit instantiations to catch compile-time errors
 template class bmi::multi_index_container<
@@ -99,6 +111,8 @@ template class bmi::multi_index_container<
       <bmi::tag<age>, BOOST_MULTI_INDEX_MEMBER(employee,int,age)> >,
   node_allocator<employee,managed_shared_memory::segment_manager>
 >;
+
+}}
 
 int main ()
 {

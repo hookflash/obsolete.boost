@@ -71,6 +71,24 @@ namespace ns
         int y;
     };
 #endif
+    
+    // A sequence that has data members defined in an unrelated namespace
+    // (std, in this case). This allows testing ADL issues.
+    class name
+    {
+    public:
+        name() {}
+        name(const std::string& last, const std::string& first)
+           : last(last), first(first) {}
+        
+        const std::string& get_last() const { return last; }
+        const std::string& get_first() const { return first; }
+        void set_last(const std::string& last_) { last = last_; }
+        void set_first(const std::string& first_) { first = first_; }
+    private:
+        std::string last;
+        std::string first;
+    };
 }
 
 BOOST_FUSION_ADAPT_ADT(
@@ -87,12 +105,17 @@ BOOST_FUSION_ADAPT_ADT(
 )
 #endif
 
+BOOST_FUSION_ADAPT_ADT(
+    ns::name,
+    (const std::string&, const std::string&, obj.get_last(), obj.set_last(val))
+    (const std::string&, const std::string&, obj.get_first(), obj.set_first(val))
+)
+
 int
 main()
 {
     using namespace boost::fusion;
     using namespace boost;
-    using namespace std;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -111,8 +134,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<ns::point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<ns::point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<ns::point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -122,6 +145,20 @@ main()
         fusion::vector<int, float> v1(4, 2);
         ns::point v2(5, 3);
         fusion::vector<long, double> v3(5, 4);
+        BOOST_TEST(v1 < v2);
+        BOOST_TEST(v1 <= v2);
+        BOOST_TEST(v2 > v1);
+        BOOST_TEST(v2 >= v1);
+        BOOST_TEST(v2 < v3);
+        BOOST_TEST(v2 <= v3);
+        BOOST_TEST(v3 > v2);
+        BOOST_TEST(v3 >= v2);
+    }
+
+    {
+        fusion::vector<std::string, std::string> v1("Lincoln", "Abraham");
+        ns::name v2("Roosevelt", "Franklin");
+        ns::name v3("Roosevelt", "Theodore");
         BOOST_TEST(v1 < v2);
         BOOST_TEST(v1 <= v2);
         BOOST_TEST(v2 > v1);
@@ -149,7 +186,7 @@ main()
     {
         BOOST_MPL_ASSERT((mpl::is_sequence<ns::point>));
         BOOST_MPL_ASSERT((boost::is_same<
-            fusion::result_of::value_at_c<ns::point,0>::type
+            boost::fusion::result_of::value_at_c<ns::point,0>::type
           , mpl::front<ns::point>::type>));
     }
 
@@ -167,8 +204,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<ns::point_with_private_members>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<ns::point_with_private_members>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::point_with_private_members>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<ns::point_with_private_members>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -178,22 +215,22 @@ main()
     {
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point>::type,
+                boost::fusion::result_of::front<ns::point>::type,
                 boost::fusion::extension::adt_attribute_proxy<ns::point,0,false>
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point>::type::type,
+                boost::fusion::result_of::front<ns::point>::type::type,
                 int
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point const>::type,
+                boost::fusion::result_of::front<ns::point const>::type,
                 boost::fusion::extension::adt_attribute_proxy<ns::point,0,true>
             >));
         BOOST_MPL_ASSERT((
             boost::is_same<
-                result_of::front<ns::point const>::type::type,
+                boost::fusion::result_of::front<ns::point const>::type::type,
                 int
             >));
     }

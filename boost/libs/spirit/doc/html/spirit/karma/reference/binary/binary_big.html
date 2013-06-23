@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Binary Big Endianness Generators</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.0">
-<link rel="home" href="../../../../index.html" title="Spirit 2.4.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../../../../index.html" title="Spirit 2.5.2">
 <link rel="up" href="../binary.html" title="Binary Generators">
 <link rel="prev" href="binary_little.html" title="Binary Little Endianness Generators">
 <link rel="next" href="../char.html" title="Char Generators">
@@ -27,28 +27,28 @@
 <a name="spirit.karma.reference.binary.binary_big"></a><a class="link" href="binary_big.html" title="Binary Big Endianness Generators">Binary
           Big Endianness Generators</a>
 </h5></div></div></div>
-<a name="spirit.karma.reference.binary.binary_big.description"></a><h6>
-<a name="id1120471"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.description">Description</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h0"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.description"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.description">Description</a>
           </h6>
 <p>
             The big native endianness generators described in this section are used
             to emit binary byte streams laid out conforming to the big endianness
             byte order.
           </p>
-<a name="spirit.karma.reference.binary.binary_big.header"></a><h6>
-<a name="id1120488"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.header">Header</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h1"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.header"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.header">Header</a>
           </h6>
-<pre class="programlisting"><span class="comment">// forwards to &lt;boost/spirit/home/karma/binary.hpp&gt;
-</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">spirit</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">karma_binary</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="comment">// forwards to &lt;boost/spirit/home/karma/binary.hpp&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">spirit</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">karma_binary</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
             Also, see <a class="link" href="../../../structure/include.html" title="Include">Include Structure</a>.
           </p>
-<a name="spirit.karma.reference.binary.binary_big.namespace"></a><h6>
-<a name="id1120562"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.namespace">Namespace</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h2"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.namespace"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.namespace">Namespace</a>
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
@@ -76,6 +76,18 @@
                       alias: boost::spirit::karma::big_qword</span></code>
                     </p>
                   </td></tr>
+<tr><td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">spirit</span><span class="special">::</span><span class="identifier">big_bin_float</span> <span class="comment">//
+                      alias: boost::spirit::karma::big_bin_float</span></code>
+                    </p>
+                  </td></tr>
+<tr><td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">spirit</span><span class="special">::</span><span class="identifier">big_bin_double</span> <span class="comment">//
+                      alias: boost::spirit::karma::big_bin_double</span></code>
+                    </p>
+                  </td></tr>
 </tbody>
 </table></div>
 <div class="note"><table border="0" summary="Note">
@@ -92,10 +104,9 @@
               (64 bit) integer types).
             </p></td></tr>
 </table></div>
-<a name="spirit.karma.reference.binary.binary_big.model_of"></a><h6>
-<a name="id1120771"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.model_of">Model
-            of</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h3"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.model_of"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.model_of">Model of</a>
           </h6>
 <div class="blockquote"><blockquote class="blockquote"><p>
               <a class="link" href="../generator_concepts/primitivegenerator.html" title="PrimitiveGenerator"><code class="computeroutput"><span class="identifier">PrimitiveGenerator</span></code></a>
@@ -121,11 +132,23 @@
                   Argument</a> that evaluates to a 64 bit binary value. This value
                   is always interpreted using native endianness.
                 </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
+<dd><p>
+                  A float binary value or a <a class="link" href="../basics.html#spirit.karma.reference.basics.lazy_argument">Lazy
+                  Argument</a> that evaluates to a float binary value. This value
+                  is always interpreted using native endianness.
+                </p></dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">d</span></code></span></dt>
+<dd><p>
+                  A double binary value or a <a class="link" href="../basics.html#spirit.karma.reference.basics.lazy_argument">Lazy
+                  Argument</a> that evaluates to a double binary value. This value
+                  is always interpreted using native endianness.
+                </p></dd>
 </dl>
 </div>
-<a name="spirit.karma.reference.binary.binary_big.expression_semantics"></a><h6>
-<a name="id1120888"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.expression_semantics">Expression
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h4"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.expression_semantics"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.expression_semantics">Expression
             Semantics</a>
           </h6>
 <p>
@@ -198,6 +221,34 @@
 <tr>
 <td>
                     <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_float</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Output the binary representation of the mandatory float attribute
+                      in big endian representation. This generator never fails (unless
+                      the underlying output stream reports an error).
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_double</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Output the binary representation of the mandatory double attribute
+                      in big endian representation. This generator never fails (unless
+                      the underlying output stream reports an error).
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
                       <code class="computeroutput"><span class="identifier">big_word</span><span class="special">(</span><span class="identifier">w</span><span class="special">)</span></code>
                     </p>
                   </td>
@@ -240,11 +291,39 @@
                     </p>
                   </td>
 </tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_float</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Output the binary representation of the immediate float parameter
+                      in big endian representation. This generator never fails (unless
+                      the underlying output stream reports an error).
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_double</span><span class="special">(</span><span class="identifier">d</span><span class="special">)</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Output the binary representation of the immediate double parameter
+                      in big endian representation. This generator never fails (unless
+                      the underlying output stream reports an error).
+                    </p>
+                  </td>
+</tr>
 </tbody>
 </table></div>
-<a name="spirit.karma.reference.binary.binary_big.attributes"></a><h6>
-<a name="id1121138"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.attributes">Attributes</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h5"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.attributes"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.attributes">Attributes</a>
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -306,6 +385,32 @@
 <tr>
 <td>
                     <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_float</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="keyword">float</span></code>, attribute
+                      is mandatory (otherwise compilation will fail)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_double</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="keyword">double</span></code>, attribute
+                      is mandatory (otherwise compilation will fail)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
                       <code class="computeroutput"><span class="identifier">big_word</span><span class="special">(</span><span class="identifier">w</span><span class="special">)</span></code>
                     </p>
                   </td>
@@ -339,18 +444,42 @@
                     </p>
                   </td>
 </tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_float</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">unused</span></code>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">big_bin_double</span><span class="special">(</span><span class="identifier">d</span><span class="special">)</span></code>
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      <code class="computeroutput"><span class="identifier">unused</span></code>
+                    </p>
+                  </td>
+</tr>
 </tbody>
 </table></div>
-<a name="spirit.karma.reference.binary.binary_big.complexity"></a><h6>
-<a name="id1121434"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.complexity">Complexity</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h6"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.complexity"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.complexity">Complexity</a>
           </h6>
 <div class="blockquote"><blockquote class="blockquote"><p>
               O(N), where N is the number of bytes emitted by the binary generator
             </p></blockquote></div>
-<a name="spirit.karma.reference.binary.binary_big.example"></a><h6>
-<a name="id1121455"></a>
-            <a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.example">Example</a>
+<h6>
+<a name="spirit.karma.reference.binary.binary_big.h7"></a>
+            <span><a name="spirit.karma.reference.binary.binary_big.example"></a></span><a class="link" href="binary_big.html#spirit.karma.reference.binary.binary_big.example">Example</a>
           </h6>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -366,7 +495,6 @@
             Some includes:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">spirit</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">karma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">spirit</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">support_utree</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -382,7 +510,6 @@
             Some using declarations:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">spirit</span><span class="special">::</span><span class="identifier">karma</span><span class="special">::</span><span class="identifier">big_word</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">spirit</span><span class="special">::</span><span class="identifier">karma</span><span class="special">::</span><span class="identifier">big_dword</span><span class="special">;</span>
@@ -394,7 +521,6 @@
             Basic usage of the big binary generators:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="identifier">test_binary_generator</span><span class="special">(</span><span class="string">"\x02\x01"</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">big_word</span><span class="special">(</span><span class="number">0x0201</span><span class="special">));</span>
 <span class="identifier">test_binary_generator</span><span class="special">(</span><span class="string">"\x04\x03\x02\x01"</span><span class="special">,</span> <span class="number">4</span><span class="special">,</span> <span class="identifier">big_dword</span><span class="special">(</span><span class="number">0x04030201</span><span class="special">));</span>

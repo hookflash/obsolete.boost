@@ -1,4 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012 Eric Niebler
+
+  Distributed under the Boost
+  Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+  -->
 <header name="boost/proto/generate.hpp">
   <para>Contains definition of
     <computeroutput><classname alt="boost::proto::default_generator">proto::default_generator</classname></computeroutput>,
@@ -21,7 +28,7 @@
           </para>
         </description>
         <inherit>
-          <type>proto::callable</type>
+          <type><classname>proto::callable</classname></type>
         </inherit>
         <struct-specialization name="result">
           <template>
@@ -52,6 +59,17 @@
             </returns>
           </method>
         </method-group>
+      </struct>
+
+      <!-- proto::basic_default_generator -->
+      <struct name="basic_default_generator">
+        <purpose>
+          A simple generator that passes an expression through unchanged while stating
+          a preference for <classname>proto::basic_expr</classname>&lt;&gt; over
+          <classname>proto::expr</classname>&lt;&gt;.</purpose>
+        <inherit>
+          <type><classname>proto::use_basic_expr</classname>&lt; <classname>proto::default_generator</classname> &gt;</type>
+        </inherit>
       </struct>
 
       <!-- proto::generator -->

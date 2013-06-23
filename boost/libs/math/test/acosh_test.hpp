@@ -44,7 +44,7 @@ T    acosh_error_evaluator(T x)
 
 BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
 {
-    BOOST_MESSAGE("Testing acosh in the real domain for "
+    BOOST_TEST_MESSAGE("Testing acosh in the real domain for "
         << string_type_name<T>::_() << ".");
     
     for    (int i = 0; i <= 100; i++)
@@ -76,13 +76,22 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
        (acosh_error_evaluator(x))
        (static_cast<T>(4)));
+    //
+    // Special cases:
+    //
+    if(std::numeric_limits<T>::has_infinity)
+    {
+       T inf = std::numeric_limits<T>::infinity();
+       boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error> > pol;
+       BOOST_CHECK_EQUAL(boost::math::asinh(inf, pol), inf);
+    }
 }
 
 
 void    acosh_manual_check()
 {
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("acosh");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("acosh");
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -92,20 +101,20 @@ void    acosh_manual_check()
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_TEST_MESSAGE(  ::std::setw(15)
                      << acosh_error_evaluator(xf)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xd)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xl));
 #else
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_TEST_MESSAGE(  ::std::setw(15)
                      << acosh_error_evaluator(xf)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xd));
 #endif
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 

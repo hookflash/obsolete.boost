@@ -3,15 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../helpers/prefix.hpp"
-
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/input_iterator.hpp"
 
 template <typename T> inline void avoid_unused_warning(T const&) {}
 
-test::seed_t seed(91274);
+test::seed_t initialize_seed(91274);
 
 struct objects
 {
@@ -161,7 +159,7 @@ struct copy_range_construct_test : public range<T>, objects
     }
 };
 
-RUN_EXCEPTION_TESTS(
+EXCEPTION_TESTS(
     (construct_test1)
     (construct_test2)
     (construct_test3)
@@ -176,3 +174,4 @@ RUN_EXCEPTION_TESTS(
     (input_range_construct_test)
     (copy_range_construct_test),
     CONTAINER_SEQ)
+RUN_TESTS()

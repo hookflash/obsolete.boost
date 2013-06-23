@@ -13,7 +13,6 @@
 #include <cmath>
 #include "./metafunctions.hpp"
 #include "./helpers.hpp"
-#include "./allocator.hpp"
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
@@ -29,16 +28,13 @@ namespace test
     {
         BOOST_DEDUCED_TYPENAME X::key_equal eq = x1.key_eq();
         typedef BOOST_DEDUCED_TYPENAME X::key_type key_type;
-        // Boost.Test was reporting memory leaks for std::set on g++-3.3.
-        // So I work around it by using malloc.
-        std::set<key_type, std::less<key_type>,
-            test::malloc_allocator<key_type> > found_;
+        std::set<key_type, std::less<key_type> > found_;
 
         BOOST_DEDUCED_TYPENAME X::const_iterator
             it = x1.begin(), end = x1.end();
         BOOST_DEDUCED_TYPENAME X::size_type size = 0;
         while(it != end) {
-            // First test that the current key has not occured before, required
+            // First test that the current key has not occurred before, required
             // to test either that keys are unique or that equivalent keys are
             // adjacent. (6.3.1/6)
             key_type key = get_key<X>(*it);
@@ -65,42 +61,60 @@ namespace test
                 std::cerr<<x1.count(key)<<","<<count<<"\n";
             }
 
-            // I'm not bothering with the following test for now, as the
-            // previous test is probably more enough to catch the kind of
-            // errors that this would catch (if an element was in the wrong
-            // bucket it not be found by the call to count, if elements are not
-            // adjacent then they would be caught when checking against
-            // found_.
-
-            // // Check that the keys are in the correct bucket and are
-            // // adjacent in the bucket.
-            // BOOST_DEDUCED_TYPENAME X::size_type bucket = x1.bucket(key);
-            // BOOST_DEDUCED_TYPENAME X::const_local_iterator
-            //     lit = x1.begin(bucket), lend = x1.end(bucket);
-            // for(; lit != lend && !eq(get_key<X>(*lit), key); ++lit) continue;
-            // if(lit == lend)
-            //     BOOST_ERROR("Unable to find element with a local_iterator");
-            // unsigned int count2 = 0;
-            // for(; lit != lend && eq(get_key<X>(*lit), key); ++lit) ++count2;
-            // if(count != count2)
-            //     BOOST_ERROR("Element count doesn't match local_iterator.");
-            // for(; lit != lend; ++lit) {
-            //     if(eq(get_key<X>(*lit), key)) {
-            //         BOOST_ERROR("Non-adjacent element with equivalent key "
-            //             "in bucket.");
-            //         break;
-            //     }
-            // }
+            // Check that the keys are in the correct bucket and are
+            // adjacent in the bucket.
+            BOOST_DEDUCED_TYPENAME X::size_type bucket = x1.bucket(key);
+            BOOST_DEDUCED_TYPENAME X::const_local_iterator
+                lit = x1.begin(bucket), lend = x1.end(bucket);
+            for(; lit != lend && !eq(get_key<X>(*lit), key); ++lit) continue;
+            if(lit == lend)
+                BOOST_ERROR("Unable to find element with a local_iterator");
+            unsigned int count2 = 0;
+            for(; lit != lend && eq(get_key<X>(*lit), key); ++lit) ++count2;
+            if(count != count2)
+                BOOST_ERROR("Element count doesn't match local_iterator.");
+            for(; lit != lend; ++lit) {
+                if(eq(get_key<X>(*lit), key)) {
+                    BOOST_ERROR("Non-adjacent element with equivalent key "
+                        "in bucket.");
+                    break;
+                }
+            }
         };
 
-        // Finally, check that size matches up.
-        if(x1.size() != size)
+        // Check that size matches up.
+
+        if(x1.size() != size) {
             BOOST_ERROR("x1.size() doesn't match actual size.");
+            std::cout<<x1.size()<<"/"<<size<<std::endl;
+        }
+
+        // Check the load factor.
+
         float load_factor =
             static_cast<float>(size) / static_cast<float>(x1.bucket_count());
         using namespace std;
         if(fabs(x1.load_factor() - load_factor) > x1.load_factor() / 64)
             BOOST_ERROR("x1.load_factor() doesn't match actual load_factor.");
+
+        // Check that size in the buckets matches up.
+
+        BOOST_DEDUCED_TYPENAME X::size_type bucket_size = 0;
+
+        for (BOOST_DEDUCED_TYPENAME X::size_type
+                i = 0; i < x1.bucket_count(); ++i)
+        {
+            for (BOOST_DEDUCED_TYPENAME X::const_local_iterator
+                    begin = x1.begin(i), end = x1.end(i); begin != end; ++begin)
+            {
+                ++bucket_size;
+            }
+        }
+
+        if(x1.size() != bucket_size) {
+            BOOST_ERROR("x1.size() doesn't match bucket size.");
+            std::cout<<x1.size()<<"/"<<bucket_size<<std::endl;
+        }
     }
 }
 

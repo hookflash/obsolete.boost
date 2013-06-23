@@ -79,7 +79,7 @@ those types that model <a
 href="./VertexListGraph.html">VertexListGraph</a>. This is enforced by
 the use of those graph operations in the algorithm, and furthermore by
 our explicit requirement added as a concept check with
-<TT>function_requires()</TT> (see Section <A
+<TT>BOOST_CONCEPT_ASSERT()</TT> (see Section <A
 HREF="../../concept_check/concept_check.htm">Concept
 Checking</A> for more details about concept checking).
 
@@ -106,7 +106,7 @@ hence the return type of the function is the graph's
 graph algorithm as a template function, the concept checks, and some
 typedefs. The implementation is straightforward, the only step not
 discussed above is the color initialization step, where we set the
-color of all the vertices to ``uncolored''.
+color of all the vertices to "uncolored."
 
 <P>
 <PRE>
@@ -122,11 +122,11 @@ namespace boost {
     typedef typename property_traits&lt;Color&gt;::value_type ColorType;
     typedef typename property_traits&lt;Order&gt;::value_type OrderType;
 
-    function_requires&lt; VertexListGraphConcept&lt;VertexListGraph&gt; &gt;();
-    function_requires&lt; ReadWritePropertyMapConcept&lt;Color, vertex_descriptor&gt; &gt;();
-    function_requires&lt; IntegerConcept&lt;ColorType&gt; &gt;();
-    function_requires&lt; size_type, ReadablePropertyMapConcept&lt;Order&gt; &gt;();
-    typedef typename same_type&lt;OrderType, vertex_descriptor&gt;::type req_same;
+    BOOST_CONCEPT_ASSERT(( VertexListGraphConcept&lt;VertexListGraph&gt; ));
+    BOOST_CONCEPT_ASSERT(( ReadWritePropertyMapConcept&lt;Color, vertex_descriptor&gt; ));
+    BOOST_CONCEPT_ASSERT(( IntegerConcept&lt;ColorType&gt; ));
+    BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept&lt;Order, size_type&gt; ));
+    BOOST_STATIC_ASSERT((is_same&lt;OrderType, vertex_descriptor&gt;::value));
     
     size_type max_color = 0;
     const size_type V = num_vertices(G);

@@ -8,6 +8,9 @@
   -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
+
+  <xsl:param name="template.param.brief" select="false()"/>
+  
   <!-- Determine the length of a template header synopsis -->
   <xsl:template name="template.synopsis.length">
     <xsl:variable name="text">
@@ -235,7 +238,7 @@
     <xsl:param name="parameters" select="template-type-parameter|template-varargs|template-nontype-parameter"/>
 
     <xsl:choose>
-      <xsl:when test="$parameters/purpose">
+      <xsl:when test="$parameters/purpose and $template.param.brief">
         <xsl:call-template name="template.reference.parameters.comments">
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="highlight" select="$highlight"/>
@@ -285,11 +288,30 @@
 
       <!-- Display the comment -->
       <xsl:if test="$parameter/purpose">
+        <xsl:variable name="param-text">
+          <!-- Display the parameter -->
+          <xsl:call-template name="template.parameter">
+            <xsl:with-param name="parameter" select="$parameter"/>
+            <xsl:with-param name="is-last" select="not($rest)"/>
+            <xsl:with-param name="highlight" select="false()"/>
+          </xsl:call-template>
+        </xsl:variable>
         <xsl:call-template name="highlight-comment">
           <xsl:with-param name="text">
             <xsl:text>  // </xsl:text>
-            <xsl:apply-templates 
-              select="$parameter/purpose/*|$parameter/purpose/text()"/>
+            <xsl:apply-templates
+              select="$parameter/purpose/*|$parameter/purpose/text()" mode="comment">
+              <xsl:with-param name="wrap" select="true()"/>
+              <xsl:with-param name="prefix">
+                <xsl:call-template name="indent">
+                  <xsl:with-param name="indentation" select="$indentation + string-length($param-text)"/>
+                </xsl:call-template>
+                <xsl:if test="$rest">
+                  <xsl:text>  </xsl:text>
+                </xsl:if>
+                <xsl:text>  // </xsl:text>
+              </xsl:with-param>
+            </xsl:apply-templates>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:if>

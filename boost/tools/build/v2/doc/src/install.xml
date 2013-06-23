@@ -22,14 +22,14 @@
       <listitem>
         <simpara>
           Run either <command>.\bootstrap.bat</command> (on Windows), or
-          <command>./bootstrap.sh</command> (on other operating systmes).
+          <command>./bootstrap.sh</command> (on other operating systems).
         </simpara>
       </listitem>
 
       <listitem>
         <simpara>
           Run 
-          <screen>./bjam install --prefix=<replaceable>PREFIX</replaceable></screen>
+          <screen>./b2 install --prefix=<replaceable>PREFIX</replaceable></screen>
           where <replaceable>PREFIX</replaceable> is a directory where you
           want Boost.Build to be installed.
         </simpara>
@@ -43,16 +43,16 @@
       </listitem>
     </orderedlist>
 
-    <para>If you are not using Boost.Build package, but rather the version
+    <para>If you are not using a Boost.Build package, but rather the version
     bundled with the Boost C++ Libraries, the above commands should be run
     in the <filename>tools/build/v2</filename> directory.</para>
 
     <para>
-      Now that Boost.Build is installed, you can try some of examples. Copy
+      Now that Boost.Build is installed, you can try some of the examples. Copy
       <filename><replaceable>PREFIX</replaceable>/share/boost-build/examples/hello</filename>
       to a different directory, then change to that directory and run:
-<screen><filename><replaceable>PREFIX</replaceable>/bin/bjam</filename></screen>
-      A simple executable should be build.
+<screen><filename><replaceable>PREFIX</replaceable>/bin/b2</filename></screen>
+      A simple executable should be built.
     </para>
 
       <!--

@@ -10,8 +10,9 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <utility>
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 struct X
 {
@@ -96,7 +97,7 @@ int main()
     return boost::report_errors();
 }
 
-#else // !defined( BOOST_HAS_RVALUE_REFS )
+#else // defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 int main()
 {

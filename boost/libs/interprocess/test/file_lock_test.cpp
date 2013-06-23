@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2004-2009. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2004-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -24,7 +24,7 @@ using namespace boost::interprocess;
 static const std::size_t FileSize = 1000;
 inline std::string get_filename()
 {
-   std::string ret (detail::get_temporary_path());
+   std::string ret (ipcdetail::get_temporary_path());
    ret += "/";
    ret += test::get_process_id_name();
    return ret;
@@ -64,9 +64,9 @@ int main ()
    {
       //Now test move semantics
       file_lock mapping(get_filename().c_str());
-      file_lock move_ctor(boost::interprocess::move(mapping));
+      file_lock move_ctor(boost::move(mapping));
       file_lock move_assign;
-      move_assign = boost::interprocess::move(move_ctor);
+      move_assign = boost::move(move_ctor);
       mapping.swap(move_assign);
    }
 

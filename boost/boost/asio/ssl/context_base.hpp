@@ -2,7 +2,7 @@
 // ssl/context_base.hpp
 // ~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2005-2011 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2012 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -71,29 +71,29 @@ public:
   };
 
   /// Bitmask type for SSL options.
-  typedef int options;
+  typedef long options;
 
 #if defined(GENERATING_DOCUMENTATION)
   /// Implement various bug workarounds.
-  static const int default_workarounds = implementation_defined;
+  static const long default_workarounds = implementation_defined;
 
   /// Always create a new key when using tmp_dh parameters.
-  static const int single_dh_use = implementation_defined;
+  static const long single_dh_use = implementation_defined;
 
   /// Disable SSL v2.
-  static const int no_sslv2 = implementation_defined;
+  static const long no_sslv2 = implementation_defined;
 
   /// Disable SSL v3.
-  static const int no_sslv3 = implementation_defined;
+  static const long no_sslv3 = implementation_defined;
 
   /// Disable TLS v1.
-  static const int no_tlsv1 = implementation_defined;
+  static const long no_tlsv1 = implementation_defined;
 #else
-  BOOST_STATIC_CONSTANT(int, default_workarounds = SSL_OP_ALL);
-  BOOST_STATIC_CONSTANT(int, single_dh_use = SSL_OP_SINGLE_DH_USE);
-  BOOST_STATIC_CONSTANT(int, no_sslv2 = SSL_OP_NO_SSLv2);
-  BOOST_STATIC_CONSTANT(int, no_sslv3 = SSL_OP_NO_SSLv3);
-  BOOST_STATIC_CONSTANT(int, no_tlsv1 = SSL_OP_NO_TLSv1);
+  BOOST_STATIC_CONSTANT(long, default_workarounds = SSL_OP_ALL);
+  BOOST_STATIC_CONSTANT(long, single_dh_use = SSL_OP_SINGLE_DH_USE);
+  BOOST_STATIC_CONSTANT(long, no_sslv2 = SSL_OP_NO_SSLv2);
+  BOOST_STATIC_CONSTANT(long, no_sslv3 = SSL_OP_NO_SSLv3);
+  BOOST_STATIC_CONSTANT(long, no_tlsv1 = SSL_OP_NO_TLSv1);
 #endif
 
   /// File format types.
@@ -106,24 +106,11 @@ public:
     pem
   };
 
-  /// Bitmask type for peer verification.
+#if !defined(GENERATING_DOCUMENTATION)
+  // The following types and constants are preserved for backward compatibility.
+  // New programs should use the equivalents of the same names that are defined
+  // in the boost::asio::ssl namespace.
   typedef int verify_mode;
-
-#if defined(GENERATING_DOCUMENTATION)
-  /// No verification.
-  static const int verify_none = implementation_defined;
-
-  /// Verify the peer.
-  static const int verify_peer = implementation_defined;
-
-  /// Fail verification if the peer has no certificate. Ignored unless
-  /// verify_peer is set.
-  static const int verify_fail_if_no_peer_cert = implementation_defined;
-
-  /// Do not request client certificate on renegotiation. Ignored unless
-  /// verify_peer is set.
-  static const int verify_client_once = implementation_defined;
-#else
   BOOST_STATIC_CONSTANT(int, verify_none = SSL_VERIFY_NONE);
   BOOST_STATIC_CONSTANT(int, verify_peer = SSL_VERIFY_PEER);
   BOOST_STATIC_CONSTANT(int,

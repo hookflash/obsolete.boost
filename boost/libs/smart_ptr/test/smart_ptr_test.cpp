@@ -33,10 +33,7 @@
 # pragma warn -8092 // template argument passed to 'find' is not an iterator
 #endif
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/shared_array.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include <boost/detail/lightweight_test.hpp>
 
@@ -239,7 +236,7 @@ void test()
     ca2.reset();
     BOOST_TEST( ca.use_count() == 2 );
     BOOST_TEST( ca3.use_count() == 2 );
-    BOOST_TEST( ca2.use_count() == 1 );
+    BOOST_TEST( ca2.use_count() == 0 );
 
     ca.reset();
     BOOST_TEST( ca.get() == 0 );
@@ -272,7 +269,7 @@ void test()
     udta2.reset();
     BOOST_TEST( udta2.get() == 0 );
     BOOST_TEST( udta.use_count() == 1 );
-    BOOST_TEST( udta2.use_count() == 1 );
+    BOOST_TEST( udta2.use_count() == 0 );
 
     BOOST_TEST( UDT_use_count == 4 );  // reality check
 

@@ -9,19 +9,20 @@ project unordered-test/unordered
     : requirements
         <warnings>all
         <toolset>intel:<warnings>on
-        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
-        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
-        <toolset>gcc:<define>_GLIBCXX_DEBUG
+        # Would be nice to define -Wundef, but I'm getting warnings from
+        # Boost.Preprocessor on trunk.
+        <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion -Wno-long-long -Wfloat-equal"
+        <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion -Wfloat-equal"
+        #<toolset>gcc:<define>_GLIBCXX_DEBUG
         #<toolset>darwin:<define>_GLIBCXX_DEBUG
-        <toolset>msvc:<warnings-as-errors>on
-        #<toolset>gcc:<warnings-as-errors>on
-        #<toolset>darwin:<warnings-as-errors>on
     ;
 
 test-suite unordered
     :
         [ run fwd_set_test.cpp ]
         [ run fwd_map_test.cpp ]
+        [ run allocator_traits.cpp ]
+        [ run minimal_allocator.cpp ]
         [ run compile_set.cpp ]
         [ run compile_map.cpp ]
         [ run link_test_1.cpp link_test_2.cpp ]
@@ -43,5 +44,21 @@ test-suite unordered
         [ run load_factor_tests.cpp ]
         [ run rehash_tests.cpp ]
         [ run equality_tests.cpp ]
-        [ run swap_tests.cpp : : : <define>BOOST_UNORDERED_SWAP_METHOD=2 ]
+        [ run swap_tests.cpp ]
+
+        [ run compile_set.cpp : :
+            : <define>BOOST_UNORDERED_USE_MOVE
+            : bmove_compile_set ]
+        [ run compile_map.cpp : :
+            : <define>BOOST_UNORDERED_USE_MOVE
+            : bmove_compile_map ]
+        [ run copy_tests.cpp : :
+            : <define>BOOST_UNORDERED_USE_MOVE
+            : bmove_copy ]
+        [ run move_tests.cpp : :
+            : <define>BOOST_UNORDERED_USE_MOVE
+            : bmove_move ]
+        [ run assign_tests.cpp : :
+            : <define>BOOST_UNORDERED_USE_MOVE
+            : bmove_assign ]
     ;

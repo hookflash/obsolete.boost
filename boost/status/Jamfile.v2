@@ -47,20 +47,28 @@ local rule run-tests ( root : tests * )
 # Please keep these in alphabetic order by test-suite name
 run-tests libs :
     accumulators/test           # test-suite accumulators
+    algorithm/test              # test-suite algorithm
     algorithm/minmax/test       # test-suite algorith/minmax
     algorithm/string/test       # test-suite algorithm/string
     array/test                  # test-suite array
     asio/test                   # test-suite asio
     assign/test                 # test-suite assign
+    atomic/test                 # test-suite atomic
     any/test                    # test-suite any
     bimap/test                  # test-suite bimap
     bind/test                   # test-suite bind
+    chrono/test                 # test-suite chrono
+    container/example           # test-suite container_example
+    container/test              # test-suite container_test
     circular_buffer/test        # test-suite circular_buffer
     concept_check               # test-suite concept_check
     config/test                 # test-suite config
+    context/test                # test-suite context
     conversion/test             # test-suite conversion
+    coroutine/test              # test-suite coroutine
     crc/test                    # test-suite crc
     date_time/test              # test-suite date_time
+    detail/test                 # test-suite detail
     disjoint_sets               # test-suite disjoint_sets
     dynamic_bitset              # test-suite dynamic_bitset
     exception/test
@@ -72,12 +80,15 @@ run-tests libs :
     functional/test             # test-suite functional
     functional/factory/test     # test-suite functional/factory
     functional/forward/test     # test-suite functional/forward
-    functional/hash/test        # test-suite functional/hash
+    functional/hash/test/extra  # test-suite functional/hash
+    functional/overloaded_function/test # test-suite func./overloaded_function
     function_types/test         # test-suite function_types
     fusion/test                 # test-suite fusion
+    geometry/test               # test-suite geometry
     gil/test                    # test-suite gil
     graph/test                  # test-suite graph
     graph_parallel/test         # test-suite graph/parallel
+    heap/test                   # test-suite heap
     icl/test                    # test-suite icl
     io/test                     # test-suite io
     integer/test                # test-suite integer
@@ -88,18 +99,26 @@ run-tests libs :
     iostreams/test              # test-suite iostreams
     iterator/test               # test-suite iterator
     lambda/test                 # test-suite lambda
+    local_function/test         # test-suite local_function
+    locale/test                 # test-suite locale
     logic/test                  # test-suite logic
+    lockfree/test               # test-suite lockfree
     math/test                   # test-suite math
+    multiprecision/test         # test-suite multiprecision
+    move/example                # test-suite move_example
+    move/test                   # test-suite move_test
     mpi/test                    # test-suite mpi
     mpl/test                    # test-suite mpl
     msm/test                    # msm-unit-tests
     numeric/conversion/test     # test-suite numeric/conversion
     numeric/interval/test       # test-suite numeric/interval
+    numeric/odeint/test         # test-suite numeric/odeint
     numeric/ublas/test          # test-suite numeirc/uBLAS
     multi_array/test            # test-suite multi_array
     multi_index/test            # test-suite multi_index
     optional/test               # test-suite optional
     parameter/test              # test-suite parameter
+    phoenix/test                # test-suite phoenix
     polygon/test                # test-suite polygon
     pool/test                   # test-suite pool
     preprocessor/test           # test-suite preprocessor
@@ -111,6 +130,7 @@ run-tests libs :
     python/test                 # test-suite python
     random/test                 # test-suite random
     range/test                  # test-suite range
+    ratio/test                  # test-suite ratio
     rational/test               # test-suite rational
     regex/test                  # test-suite regex
     regex/example               # test-suite regex-examples
@@ -121,6 +141,7 @@ run-tests libs :
     smart_ptr/test              # test-suite smart_ptr
     spirit/classic/test         # test-suite classic spirit
     spirit/test                 # test-suite spirit_v2
+    spirit/repository/test      # test-suite spirit_v2 repository
     statechart/test             # test-suite statechart
     static_assert               # test-suite static_assert
     system/test                 # test-suite system
@@ -136,6 +157,7 @@ run-tests libs :
     unordered/test/unordered    # test-suite unordered
     unordered/test/exception    # test-suite unordered-exception
     utility/enable_if/test      # test-suite utility/enable_if
+    utility/identity_type/test  # test-suite utility/identity_type
     utility/swap/test           # test-suite utility/swap
     utility/test                # test-suite utility
     uuid/test                   # test-suite uuid
@@ -147,3 +169,4 @@ run-tests libs :
 run-tests tools :
     bcp/test
     ;
+

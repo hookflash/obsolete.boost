@@ -2,7 +2,7 @@
 <!DOCTYPE boostbook PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <boostbook id="boost" xmlns:xi="http://www.w3.org/2001/XInclude"
-           last-revision="$Date: 2011-01-30 09:03:44 -0500 (Sun, 30 Jan 2011) $">
+           last-revision="$Date: 2012-12-15 10:28:27 -0800 (Sat, 15 Dec 2012) $">
   <title>The Boost C++ Libraries BoostBook Documentation Subset</title>
 
   <preface id="about">
@@ -55,6 +55,8 @@
      </libraryinfo>
    </library>
 
+   <xi:include href="atomic.xml"/>
+
    <library name="Bind" dirname="bind" html-only="1">
      <libraryinfo>
        <author>
@@ -93,6 +95,8 @@
        <librarycategory name="category:generic"/>
      </libraryinfo>
    </library>
+
+   <xi:include href="chrono.xml"/>
 
    <library name="Circular Buffer" dirname="circular_buffer" html-only="1"
             url="../../libs/circular_buffer/index.html">
@@ -184,6 +188,8 @@
        <librarycategory name="category:broken"/>
      </libraryinfo>
    </library>
+
+   <xi:include href="container.xml"/>
 
    <library name="Conversion" dirname="conversion" html-only="1"
             url="../../libs/conversion/index.html">
@@ -291,6 +297,8 @@
      </libraryinfo>
    </library>
 
+   <xi:include href="heap.xml"/>
+
    <library name="Integer" dirname="integer" html-only="1"
             url="../../libs/integer/index.html">
      <libraryinfo>
@@ -364,6 +372,10 @@
 
    <xi:include href="../../libs/lambda/doc/lambda.xml"/>
 
+   <xi:include href="lexical_cast.xml"/>
+
+   <xi:include href="lockfree.xml"/>
+
    <library name="Math" dirname="math" html-only="1">
      <libraryinfo>
        <author>
@@ -424,6 +436,8 @@
        <librarycategory name="category:math"/>
      </libraryinfo>
    </library>
+
+   <xi:include href="move.xml"/>
 
    <library name="MPL" dirname="mpl" html-only="1">
      <libraryinfo>
@@ -541,6 +555,8 @@
    </library>
 
    <xi:include href="random.xml"/>
+
+   <xi:include href="ratio.xml"/>
 
    <library name="Rational" dirname="rational" html-only="1">
      <libraryinfo>

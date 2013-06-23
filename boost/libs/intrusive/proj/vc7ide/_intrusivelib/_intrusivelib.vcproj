@@ -94,14 +94,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Jamfile"
-			Filter=""
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
-			<File
-				RelativePath="..\..\..\test\Jamfile.v2">
-			</File>
-		</Filter>
-		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
@@ -161,6 +153,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bits.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\pointer_traits.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\rbtree.hpp">
@@ -253,6 +248,9 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\generic_hook.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\has_member_function_callable_with.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\hashtable_node.hpp">
 				</File>
 				<File
@@ -262,13 +260,16 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\list_node.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\memory_util.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\mpl.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\parent_from_member.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\boost\intrusive\detail\pointer_to_other.hpp">
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\preprocessor.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\rbtree_node.hpp">
@@ -294,16 +295,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="doc"
-			Filter="">
-			<File
-				RelativePath="..\..\..\doc\intrusive.qbk">
-			</File>
-			<File
-				RelativePath="..\..\..\doc\Jamfile.v2">
-			</File>
-		</Filter>
-		<Filter
 			Name="Test headers"
 			Filter="">
 			<File
@@ -320,6 +311,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\test\itestvalue.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\test\Jamfile.v2">
 			</File>
 			<File
 				RelativePath="..\..\..\test\smart_ptr.hpp">
@@ -463,6 +457,19 @@
 			</File>
 			<File
 				RelativePath="..\..\..\perf\perf_list.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="doc"
+			Filter="">
+			<File
+				RelativePath="..\..\..\doc\index.idx">
+			</File>
+			<File
+				RelativePath="..\..\..\doc\intrusive.qbk">
+			</File>
+			<File
+				RelativePath="..\..\..\doc\Jamfile.v2">
 			</File>
 		</Filter>
 		<File

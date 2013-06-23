@@ -12,7 +12,8 @@
 #define BOOST_SPIRIT_QUICKBOOK_GRAMMARS_IMPL_HPP
 
 #include "grammar.hpp"
-#include "rule_store.hpp"
+#include "cleanup.hpp"
+#include "values.hpp"
 #include <boost/spirit/include/classic_symbols.hpp>
 
 namespace quickbook
@@ -21,39 +22,61 @@ namespace quickbook
 
     struct element_info
     {
-        enum context {
-            in_block = 1,
-            in_phrase = 2,
-            in_conditional = 4,
-        };
-
         enum type_enum {
+            nothing = 0,
             block = 1,
-            phrase = 2,
-            conditional_or_block = 5
+            conditional_or_block = 2,
+            nested_block = 4,
+            phrase = 8,
+            maybe_block = 16
         };
 
-        element_info(type_enum t, cl::rule<scanner>* r)
-            : type(t), rule(r) {}
+        enum context {
+            in_phrase = phrase | maybe_block,
+            in_nested_block = phrase | maybe_block | nested_block,
+            in_conditional = phrase | maybe_block | nested_block | conditional_or_block,
+            in_block = phrase | maybe_block | nested_block | conditional_or_block | block,
+            only_nested_block = nested_block,
+            only_block = nested_block | conditional_or_block | block,
+            only_list_block = nested_block | conditional_or_block,
+            only_contextual_block = maybe_block | nested_block | conditional_or_block | block
+        };
+
+        element_info()
+            : type(nothing), rule(), tag(0) {}
+
+        element_info(
+                type_enum t,
+                cl::rule<scanner>* r,
+                value::tag_type tag = value::default_tag,
+                unsigned int v = 0)
+            : type(t), rule(r), tag(tag), qbk_version(v) {}
 
         type_enum type;
         cl::rule<scanner>* rule;
+        value::tag_type tag;
+        unsigned int qbk_version;
     };
 
     struct quickbook_grammar::impl
     {
-        quickbook::actions& actions;
-        rule_store store_;
+        quickbook::state& state;
+        cleanup cleanup_;
 
         // Main Grammar
         cl::rule<scanner> block_start;
-        cl::rule<scanner> block_skip_initial_spaces;
-        cl::rule<scanner> common;
-        cl::rule<scanner> simple_phrase;
-        cl::rule<scanner> phrase;
+        cl::rule<scanner> phrase_start;
+        cl::rule<scanner> nested_phrase;
+        cl::rule<scanner> inline_phrase;
+        cl::rule<scanner> paragraph_phrase;
         cl::rule<scanner> extended_phrase;
+        cl::rule<scanner> table_title_phrase;
+        cl::rule<scanner> inside_preformatted;
         cl::rule<scanner> inside_paragraph;
         cl::rule<scanner> command_line;
+        cl::rule<scanner> attribute_value_1_7;
+        cl::rule<scanner> escape;
+        cl::rule<scanner> raw_escape;
 
         // Miscellaneous stuff
         cl::rule<scanner> hard_space;
@@ -62,6 +85,7 @@ namespace quickbook
         cl::rule<scanner> eol;
         cl::rule<scanner> phrase_end;
         cl::rule<scanner> comment;
+        cl::rule<scanner> line_comment;
         cl::rule<scanner> macro_identifier;
 
         // Element Symbols       
@@ -70,7 +94,7 @@ namespace quickbook
         // Doc Info
         cl::rule<scanner> doc_info_details;
         
-        impl(quickbook::actions&);
+        impl(quickbook::state&);
 
     private:
 

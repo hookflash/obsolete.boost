@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2004-2009. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2004-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -20,7 +20,7 @@ using namespace boost::interprocess;
 
 inline std::string get_filename()
 {
-   std::string ret (detail::get_temporary_path());
+   std::string ret (ipcdetail::get_temporary_path());
    ret += "/";
    ret += test::get_process_id_name();
    return ret;
@@ -48,7 +48,7 @@ int main ()
       managed_mapped_file mfile(create_only, FileName, FileSize);
 
       int i;
-      //Let's allocate some memory 
+      //Let's allocate some memory
       for(i = 0; i < max; ++i){
          array[i] = mfile.allocate(i+1);
       }
@@ -83,7 +83,7 @@ int main ()
 
       //Construct a vector in the memory-mapped file
       mfile_vect = mfile.construct<MyVect> ("MyVector") (myallocator);
-      
+
       //Flush cached data from memory-mapped file to disk
       mfile.flush();
    }
@@ -136,7 +136,7 @@ int main ()
          return -1;
    }
    {
-      std::size_t old_free_memory;
+      managed_mapped_file::size_type old_free_memory;
       {
          //Map preexisting file again in memory
          managed_mapped_file mfile(open_only, FileName);
@@ -160,7 +160,7 @@ int main ()
          return -1;
    }
    {
-      std::size_t old_free_memory, next_free_memory,
+      managed_mapped_file::size_type old_free_memory, next_free_memory,
                   old_file_size, next_file_size, final_file_size;
       {
          //Map preexisting file again in memory
@@ -212,9 +212,9 @@ int main ()
       {
          //Now test move semantics
          managed_mapped_file original(open_only, FileName);
-         managed_mapped_file move_ctor(boost::interprocess::move(original));
+         managed_mapped_file move_ctor(boost::move(original));
          managed_mapped_file move_assign;
-         move_assign = boost::interprocess::move(move_ctor);
+         move_assign = boost::move(move_ctor);
          move_assign.swap(original);
       }
    }

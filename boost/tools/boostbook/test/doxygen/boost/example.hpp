@@ -37,6 +37,16 @@ namespace example
         mutable int mutable_integer;
         const int const_integer;
         static const int static_const_integer;
+
+        // Visual check of typedef alignment.
+        /** This type has documentation. */
+        typedef int documented_type1;
+        /** \brief This type has documentation. */
+        typedef long documented_type2;
+        /** This type has documentation. */
+        typedef long double documented_type3;
+        typedef short undocumented_type1;
+        typedef double undocumented_type2;
         
         class inner_class {
         public:
@@ -47,6 +57,8 @@ namespace example
         
         /// INTERNAL ONLY
         enum internal_enum { internal_enumerator };
+
+        explicit operator int();
     protected:
         int protected_integer;
         static int protected_static_integer;
@@ -67,6 +79,8 @@ namespace example
     
     /**
      * Test some doxygen markup
+     *
+     * \warning This is just an example.
      *
      * Embedded docbook list:
      *
@@ -89,11 +103,51 @@ namespace example
      *     void foo() {}
      * \endcode
      *
+     * \tparam TypeParameter A template parameter
+     * \tparam NonTypeParameter This is a non-type template parameter
+     * \tparam TypeParameterWithDefault This is a template parameter with a default argument
      */
 
     template <typename TypeParameter, int NonTypeParameter,
         typename TypeParameterWithDefault = int>
     struct example_template {};
+
+    /**
+     * \param i A function parameter
+     * \param j Another
+     * \return The answer
+     * \pre i > j
+     *
+     * This is a test function.
+     * \ref example::example "Link to class"
+     * \ref example_template "Link to class template"
+     * \note This is a note.
+     *
+     * \see example::example and example_template
+     */
+    int namespace_func(int i, int j);
+    
+    /**
+     * Testing a function template.
+     * \tparam TypeParameter A template parameter
+     * \tparam NonTypeParameter This is a non-type template parameter
+     */
+    template <typename TypeParameter, int NonTypeParameter>
+    void namespace_func_template();
+
+    template<class T>
+    struct specialization_test {
+    };
+
+    template<class T>
+    struct specialization_test<T*> {
+        /** A constructor. */
+        specialization_test();
+        /** A destructor. */
+        ~specialization_test();
+        /** An assignment operator. */
+        specialization_test& operator=(const specialization_test&);
+    };
 }
 
 #define EXAMPLE(m) The macro

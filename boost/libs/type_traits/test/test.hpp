@@ -7,6 +7,12 @@
 #ifndef TT_TEST_HPP
 #define TT_TEST_HPP
 
+#include <boost/config.hpp>
+
+#if defined(_WIN32_WCE) && defined(BOOST_MSVC)
+#pragma warning(disable:4201)
+#endif
+
 #ifdef USE_UNIT_TEST
 #  include <boost/test/unit_test.hpp>
 #endif
@@ -15,7 +21,7 @@
 #include <typeinfo>
 
 #ifdef __BORLANDC__
-// we have to turn off these warnings overwise we get swamped by the things:
+// we have to turn off these warnings otherwise we get swamped by the things:
 #pragma option -w-8008 -w-8066
 #endif
 
@@ -61,7 +67,7 @@
 // global unit, this is not safe, but until the unit test framework uses
 // shared_ptr throughout this is about as good as it gets :-(
 //
-boost::unit_test_framework::test_suite* get_master_unit(const char* name = 0);
+boost::unit_test::test_suite* get_master_unit(const char* name = 0);
 
 //
 // initialisation class:
@@ -107,7 +113,7 @@ int error_count = 0;
    }\
    }while(0)
 
-#define BOOST_MESSAGE(message)\
+#define BOOST_TEST_MESSAGE(message)\
    do{ std::cout << __FILE__ << ":" << __LINE__ << ": " << message << std::endl; }while(0)
 
 #define BOOST_CHECK(pred)\
@@ -206,7 +212,12 @@ typedef int (UDT::*cmf)(int) const;
 // on some compilers):
 //
 typedef int& r_type;
+#ifndef BOOST_INTEL
 typedef const r_type cr_type;
+#else
+// recent Intel compilers generate a hard error on the above:
+typedef r_type cr_type;
+#endif
 # ifdef BOOST_MSVC
 #  pragma warning(pop)
 # elif defined(BOOST_INTEL)
@@ -249,7 +260,7 @@ struct nothrow_copy_UDT
 {
    nothrow_copy_UDT();
    nothrow_copy_UDT(const nothrow_copy_UDT&)throw();
-   ~nothrow_copy_UDT(){};
+   ~nothrow_copy_UDT(){}
    nothrow_copy_UDT& operator=(const nothrow_copy_UDT&);
    bool operator==(const nothrow_copy_UDT&)const
    { return true; }

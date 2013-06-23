@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2007-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -31,7 +31,7 @@ struct test_node_pool
 template <class NodePool>
 bool test_node_pool<NodePool>::allocate_then_deallocate(NodePool &pool)
 {
-   const std::size_t num_alloc = 1 + 3*pool.get_real_num_node();
+   const typename NodePool::size_type num_alloc = 1 + 3*pool.get_real_num_node();
 
    std::vector<void*> nodes;
 
@@ -49,7 +49,7 @@ bool test_node_pool<NodePool>::allocate_then_deallocate(NodePool &pool)
    if((pool.get_real_num_node() - 1) != pool.num_free_nodes()){
       return false;
    }
-   
+
    //Now deallocate all and check again
    for(std::size_t i = 0; i < num_alloc; ++i){
        pool.deallocate_node(nodes[i]);
@@ -59,7 +59,7 @@ bool test_node_pool<NodePool>::allocate_then_deallocate(NodePool &pool)
    if(4*pool.get_real_num_node() != pool.num_free_nodes()){
       return false;
    }
-   
+
    pool.deallocate_free_blocks();
 
    if(0 != pool.num_free_nodes()){
@@ -92,7 +92,7 @@ bool test_node_pool<NodePool>::deallocate_free_blocks(NodePool &pool)
    if(0 != pool.num_free_nodes()){
       return false;
    }
-   
+
    //Now deallocate one of each block per iteration
    for(std::size_t node_i = 0; node_i < nodes_per_block; ++node_i){
       //Deallocate a node per block
@@ -104,7 +104,7 @@ bool test_node_pool<NodePool>::deallocate_free_blocks(NodePool &pool)
       if(max_blocks*(node_i+1) != pool.num_free_nodes()){
          return false;
       }
-      
+
       //Now try to deallocate free blocks
       pool.deallocate_free_blocks();
 
@@ -136,7 +136,7 @@ bool test_all_node_pool()
    typedef boost::interprocess::test::test_node_pool<node_pool_t> test_node_pool_t;
    shared_memory_object::remove(test::get_process_id_name());
    {
-      managed_shared_memory shm(create_only, test::get_process_id_name(), 4*1024*sizeof(void*));
+	  managed_shared_memory shm(create_only, test::get_process_id_name(), 4*1024*sizeof(segment_manager::void_pointer));
 
       typedef deleter<node_pool_t, segment_manager> deleter_t;
       typedef unique_ptr<node_pool_t, deleter_t> unique_ptr_t;

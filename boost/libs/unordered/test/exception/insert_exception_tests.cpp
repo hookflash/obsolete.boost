@@ -3,8 +3,6 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../helpers/prefix.hpp"
-
 #include "./containers.hpp"
 #include <string>
 #include "../helpers/random_values.hpp"
@@ -13,7 +11,7 @@
 #include <boost/utility.hpp>
 #include <cmath>
 
-test::seed_t seed(747373);
+test::seed_t initialize_seed(747373);
 
 template <class T>
 struct insert_test_base : public test::exception_base
@@ -34,12 +32,12 @@ struct insert_test_base : public test::exception_base
         std::string scope(test::scope);
 
         if(scope.find("hash::operator()") == std::string::npos)
-            strong.test(x, test::exception::detail::tracker.count_allocations);
+            strong.test(x, test::detail::tracker.count_allocations);
         test::check_equivalent_keys(x);
     }
 };
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 template <class T>
 struct emplace_test1 : public insert_test_base<T>
@@ -51,7 +49,7 @@ struct emplace_test1 : public insert_test_base<T>
             it = this->values.begin(), end = this->values.end();
             it != end; ++it)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             x.emplace(*it);
         }
     }
@@ -69,7 +67,7 @@ struct insert_test1 : public insert_test_base<T>
             it = this->values.begin(), end = this->values.end();
             it != end; ++it)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             x.insert(*it);
         }
     }
@@ -85,7 +83,7 @@ struct insert_test2 : public insert_test_base<T>
             it = this->values.begin(), end = this->values.end();
             it != end; ++it)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             x.insert(x.begin(), *it);
         }
     }
@@ -113,7 +111,7 @@ struct insert_test4 : public insert_test_base<T>
             it = this->values.begin(), end = this->values.end();
             it != end; ++it)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             x.insert(it, boost::next(it));
         }
     }
@@ -152,7 +150,7 @@ struct insert_test_rehash1 : public insert_test_base<T>
                 end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             pos = x.insert(pos, *it);
         }
 
@@ -176,7 +174,7 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
                 end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
-            strong.store(x, test::exception::detail::tracker.count_allocations);
+            strong.store(x, test::detail::tracker.count_allocations);
             x.insert(*it);
         }
 
@@ -238,11 +236,12 @@ struct insert_test_rehash3 : public insert_test_base<T>
     (insert_test1)(insert_test2)(insert_test3)(insert_test4) \
     (insert_test_rehash1)(insert_test_rehash2)(insert_test_rehash3)
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 #define ALL_TESTS (emplace_test1)BASIC_TESTS
 #else
 #define ALL_TESTS BASIC_TESTS
 #endif
 
 
-RUN_EXCEPTION_TESTS(ALL_TESTS, CONTAINER_SEQ)
+EXCEPTION_TESTS(ALL_TESTS, CONTAINER_SEQ)
+RUN_TESTS()

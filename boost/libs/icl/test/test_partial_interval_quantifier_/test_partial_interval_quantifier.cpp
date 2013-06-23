@@ -10,15 +10,15 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 #include <string>
 #include <boost/mpl/list.hpp>
 #include "../unit_test_unwarned.hpp"
-#include <boost/test/test_case_template.hpp>
+
 
 // interval instance types
 #include "../test_type_lists.hpp"
 #include "../test_value_maker.hpp"
-#include "../test_laws.hpp"
 
 #include <boost/icl/interval_map.hpp>
 #include <boost/icl/split_interval_map.hpp>
+#include "../test_laws.hpp"
 
 using namespace std;
 using namespace boost;

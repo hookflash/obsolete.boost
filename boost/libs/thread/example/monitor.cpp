@@ -1,12 +1,12 @@
 // Copyright (C) 2001-2003
 // William E. Kempf
 //
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vector>
 #include <iostream>
-#include <boost/thread/condition.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 #include <boost/thread/thread.hpp>
@@ -20,7 +20,7 @@ template <typename M>
 class buffer_t
 {
 public:
-    typedef typename M::scoped_lock scoped_lock;
+    typedef boost::unique_lock<M> scoped_lock;
 
     buffer_t(int n)
         : p(0), c(0), full(0), buf(n)
@@ -60,7 +60,7 @@ public:
         for (int n = 0; n < ITERS; ++n)
         {
             {
-                boost::mutex::scoped_lock lock(io_mutex);
+                boost::unique_lock<boost::mutex> lock(io_mutex);
                 std::cout << "sending: " << n << std::endl;
             }
             get_buffer().send(n);
@@ -73,7 +73,7 @@ public:
         {
             int n = get_buffer().receive();
             {
-                boost::mutex::scoped_lock lock(io_mutex);
+                boost::unique_lock<boost::mutex> lock(io_mutex);
                 std::cout << "received: " << n << std::endl;
             }
         }
@@ -81,7 +81,7 @@ public:
 
 private:
     M mutex;
-    boost::condition cond;
+    boost::condition_variable_any cond;
     unsigned int p, c, full;
     std::vector<int> buf;
 };
@@ -89,6 +89,7 @@ private:
 template <typename M>
 void do_test(M* dummy=0)
 {
+    (void)dummy;
     typedef buffer_t<M> buffer_type;
     buffer_type::get_buffer();
     boost::thread thrd1(&buffer_type::do_receiver_thread);

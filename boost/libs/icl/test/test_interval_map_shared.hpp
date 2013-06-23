@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------+    
-Copyright (c) 2008-2009: Joachim Faulhaber
+Copyright (c) 2008-2012: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
@@ -1183,11 +1183,12 @@ template
 >
 void interval_map_find_4_numeric_continuous_types()
 {
+#ifndef BOOST_ICL_TEST_CHRONO
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type  IntervalT;
     typedef typename IntervalMapT::const_iterator c_iterator;
 
-    T q_1_2 = MK_v(1) / MK_v(2);
+    T q_1_2 = MK_v(1) / MK_v(2);//JODO Doesn't work with chrono
     T q_3_2 = MK_v(3) / MK_v(2);
     T q_1_3 = MK_v(1) / MK_v(3);
     T q_2_3 = MK_v(2) / MK_v(3);
@@ -1211,7 +1212,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK_EQUAL( found1->second, found2->second );
     BOOST_CHECK_EQUAL( found1->second, MK_u(2) );
 
-	if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         found1 = map_a.find(MK_v(0));
         found2 = icl::find(map_a, MK_v(0));
@@ -1224,7 +1225,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK      ( found1 == found2 );
     BOOST_CHECK      ( found1 == map_a.end() );
 
-	if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
+    if( mpl::or_<mpl::not_<is_static_left_open<IntervalT> >, boost::is_signed<T> >::value )
     {
         BOOST_CHECK( !icl::contains(map_a, MK_v(0)) );
     }
@@ -1232,7 +1233,7 @@ void interval_map_find_4_numeric_continuous_types()
     BOOST_CHECK( !icl::contains(map_a, MK_v(1)) );
     BOOST_CHECK(  icl::contains(map_a, q_3_2) );
     BOOST_CHECK( !icl::contains(map_a, MK_v(2)) );
-
+#endif
 }
 
 
@@ -1512,6 +1513,37 @@ void interval_map_intersects_4_bicremental_types()
 
     BOOST_CHECK( icl::disjoint(map_a,  IDv(4,6,5) ) );
     BOOST_CHECK(!icl::disjoint(map_a,  IDv(0,12,1) ) );
+}
+
+
+template 
+<
+#if (defined(__GNUC__) && (__GNUC__ < 4)) //MEMO Can be simplified, if gcc-3.4 is obsolete
+    ICL_IntervalMap_TEMPLATE(T,U,Traits,partial_absorber) IntervalMap,
+#else
+    ICL_IntervalMap_TEMPLATE(_T,_U,Traits,partial_absorber) IntervalMap,
+#endif
+    class T, class U
+>
+void interval_map_move_4_discrete_types()
+{
+#   ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    typedef IntervalMap<T,U> IntervalMapT;
+    typedef typename IntervalMapT::interval_type   IntervalT;
+
+    IntervalMapT map_A(boost::move(IntervalMapT(IDv(0,4,2))));
+    IntervalMapT map_B(boost::move(IntervalMapT(IDv(0,2,1)).add(IDv(2,4,1)).add(IDv(0,4,1))));
+
+    BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
+    BOOST_CHECK_EQUAL( map_A, join(map_B) );
+
+    map_A = boost::move(IntervalMapT(IIv(1,4,2)));
+    map_B = boost::move(IntervalMapT(CIv(0,2,1)).insert(IDv(3,5,1)).add(CDv(0,5,1)));
+
+    BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
+    BOOST_CHECK_EQUAL( map_A, join(map_B) );
+
+#   endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 }
 
 

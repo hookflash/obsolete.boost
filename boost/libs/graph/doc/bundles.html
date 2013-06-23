@@ -93,7 +93,7 @@ typedef boost::adjacency_list&lt;
     boost::property&lt;zipcodes_t, std::vector&lt;int&gt; &gt; &gt; &gt;,
     // Edge properties
     boost::property&lt;boost::edge_name_t, std::string,
-    boost::property&lt;boost::edge_length_t, double,
+    boost::property&lt;boost::edge_weight_t, double,
     boost::property&lt;edge_speed_limit_t, int,
     boost::property&lt;edge_lanes_t, int,
     boost::property&lt;edge_divided, bool&gt; &gt; &gt; &gt; &gt; &gt;
@@ -143,7 +143,7 @@ map[v].population = 49170;
 map[v].zipcodes.push_back(12180);
 Map::edge_descriptor e = *out_edges(v, map).first;
 map[e].name = "I-87";
-map[e].miles = 10;
+map[e].miles = 10.;
 map[e].speed_limit = 65;
 map[e].lanes = 4;
 map[e].divided = true;
@@ -186,8 +186,8 @@ dijkstra_shortest_paths(map, from,
                                                get(vertex_index, map))));
 </pre>
 
-<p>The type of the returned property map is <code>property_map&lt;Map, int Highway::*&gt;::type</code>
-or <code>property_map&lt;Map, int Highway::*&gt;::const_type</code>, depending on whether the graph
+<p>The type of the returned property map is <code>property_map&lt;Map, double Highway::*&gt;::type</code>
+or <code>property_map&lt;Map, double Highway::*&gt;::const_type</code>, depending on whether the graph
 <code>map</code> is non-constant or constant.
 
 <p> You may also access the entire vertex or edge bundle as a property map

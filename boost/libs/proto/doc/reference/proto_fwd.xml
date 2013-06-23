@@ -1,4 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012 Eric Niebler
+
+  Distributed under the Boost
+  Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+  -->
 <header name="boost/proto/proto_fwd.hpp">
   <para>Forward declarations of all of proto's public types and functions. </para>
   <namespace name="boost">
@@ -347,7 +354,7 @@
     <purpose>Controls the maximum number of child nodes an expression may have.</purpose>
     <description>
       <para>
-        <computeroutput>BOOST_PROTO_MAX_ARITY</computeroutput> defaults to 5. It may be set higher or lower, but not
+        <computeroutput>BOOST_PROTO_MAX_ARITY</computeroutput> defaults to 10. It may be set higher or lower, but not
         lower than 3. Setting it higher will have a negative effect on compile times. 
       </para>
       <para>
@@ -365,7 +372,7 @@
       </computeroutput> accept.</purpose>
     <description>
       <para>
-        <computeroutput>BOOST_PROTO_MAX_LOGICAL_ARITY</computeroutput> defaults to 8. It may be set higher or lower. Setting
+        <computeroutput>BOOST_PROTO_MAX_LOGICAL_ARITY</computeroutput> defaults to 10. It may be set higher or lower. Setting
         it higher will have a negative effect on compile times.
       </para>
     </description>

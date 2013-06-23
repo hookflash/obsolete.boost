@@ -3,14 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../helpers/prefix.hpp"
-
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 
 template <typename T> inline void avoid_unused_warning(T const&) {}
 
-test::seed_t seed(73041);
+test::seed_t initialize_seed(73041);
 
 template <class T>
 struct copy_test1 : public test::exception_base
@@ -66,6 +64,7 @@ struct copy_with_allocator_test : public test::exception_base
     }
 };
 
-RUN_EXCEPTION_TESTS(
+EXCEPTION_TESTS(
     (copy_test1)(copy_test2)(copy_test3)(copy_with_allocator_test),
     CONTAINER_SEQ)
+RUN_TESTS()

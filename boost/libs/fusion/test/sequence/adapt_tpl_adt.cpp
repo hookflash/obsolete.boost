@@ -65,9 +65,9 @@ int
 main()
 {
     using namespace boost::fusion;
-    using namespace std;
 
     typedef ns::point<int, int> point;
+    typedef ns::point<std::string, std::string> name;
 
     std::cout << tuple_open('[');
     std::cout << tuple_close(']');
@@ -86,8 +86,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(result_of::size<point>::value == 2);
-        BOOST_STATIC_ASSERT(!result_of::empty<point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -107,6 +107,20 @@ main()
         BOOST_TEST(v3 >= v2);
     }
 
+    {
+        boost::fusion::vector<std::string, std::string> v1("Lincoln", "Abraham");
+        name v2("Roosevelt", "Franklin");
+        name v3("Roosevelt", "Theodore");
+        BOOST_TEST(v1 < v2);
+        BOOST_TEST(v1 <= v2);
+        BOOST_TEST(v2 > v1);
+        BOOST_TEST(v2 >= v1);
+        BOOST_TEST(v2 < v3);
+        BOOST_TEST(v2 <= v3);
+        BOOST_TEST(v3 > v2);
+        BOOST_TEST(v3 >= v2);
+    }
+    
     {
         // conversion from point to vector
         point p(5, 3);

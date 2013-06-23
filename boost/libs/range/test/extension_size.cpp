@@ -12,7 +12,7 @@
 #include <boost/detail/workaround.hpp>
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#  pragma warn -8091 // supress warning in Boost.Test
+#  pragma warn -8091 // suppress warning in Boost.Test
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
@@ -40,7 +40,7 @@ namespace boost_range_extension_size_test
         impl_t m_impl;
     };
 
-    inline boost::range_difference<std::list<int> >::type
+    inline boost::range_size<std::list<int> >::type
     range_calculate_size(const FooWithoutSize& rng)
     {
         return 2u;

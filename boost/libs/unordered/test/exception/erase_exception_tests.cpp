@@ -3,14 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../helpers/prefix.hpp"
-
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
 #include "../helpers/helpers.hpp"
 
-test::seed_t seed(835193);
+test::seed_t initialize_seed(835193);
 
 template <class T>
 struct erase_test_base : public test::exception_base
@@ -51,6 +49,7 @@ struct erase_by_key_test1 : public erase_test_base<T>
     }
 };
 
-RUN_EXCEPTION_TESTS(
+EXCEPTION_TESTS(
     (erase_by_key_test1),
     CONTAINER_SEQ)
+RUN_TESTS()

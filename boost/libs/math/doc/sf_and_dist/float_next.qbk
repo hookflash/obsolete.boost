@@ -5,7 +5,9 @@
 is the gap between two different, but as close as possible, floating-point numbers.
 
 Most decimal values, for example 0.1, cannot be exactly represented as floating-point values,
-but will be stored as the closest representable floating-point.
+but will be stored as the
+[@http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding
+closest representable floating-point].
 
 Functions are provided for finding adjacent greater and lesser floating-point values,
 and estimating the number of gaps between any two floating-point values.
@@ -47,6 +49,12 @@ Returns the next representable value after /x/ in the direction of /y/.  If
 a __domain_error.  If there is no such value in the direction of /y/ then
 returns an __overflow_error.
 
+[warning The template parameter FTP must be a floating-point type. 
+An integer type, for example, will produce an unhelpful error message.]
+
+[tip Nearly always, you just want the next or prior representable value,
+so instead use `float_next` or `float_prior` below.] 
+
 [h4 Examples - nextafter]
 
 The two representations using a 32-bit float either side of unity are:
@@ -86,7 +94,7 @@ returns an __overflow_error.
 
 Has the same effect as
 
-  nextafter(val, std::numeric_limits<FPT>::max());
+  nextafter(val, (std::numeric_limits<FPT>::max)());
 
 [endsect] [/section:float_next Finding the Next Greater Representable Value (float_prior)]
 
@@ -115,7 +123,7 @@ returns an __overflow_error.
 
 Has the same effect as
 
-  nextafter(val, -std::numeric_limits<FPT>::max());  // Note most negative value -max.
+  nextafter(val, -(std::numeric_limits<FPT>::max)());  // Note most negative value -max.
 
 [endsect] [/section:float_prior Finding the Next Smaller Representable Value (float_prior)]
 
@@ -148,8 +156,8 @@ representing the number of distinct representations between /a/ and /b/.
 Note that
 
 * `float_distance(a, a)` always returns 0.
-* `float_distance(float_next(a), a)` always returns 1.
-* `float_distance(float_prior(a), a)` always returns -1.
+* `float_distance(float_next(a), a)` always returns -1.
+* `float_distance(float_prior(a), a)` always returns 1.
 
 The function `float_distance` is equivalent to calculating the number
 of ULP (Units in the Last Place) between /a/ and /b/ except that it 

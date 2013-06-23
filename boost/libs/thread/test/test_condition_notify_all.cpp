@@ -1,7 +1,9 @@
 // Copyright (C) 2007 Anthony Williams
 //
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#define BOOST_THREAD_VERSION 2
 
 #include <boost/thread/detail/config.hpp>
 
@@ -9,8 +11,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <libs/thread/test/util.inl>
-#include "condition_test_common.hpp"
+#include "./util.inl"
+#include "./condition_test_common.hpp"
 
 unsigned const number_of_test_threads=5;
 
@@ -28,7 +30,7 @@ void do_test_condition_notify_all_wakes_from_wait()
         }
 
         {
-            boost::mutex::scoped_lock lock(data.mutex);
+            boost::unique_lock<boost::mutex> lock(data.mutex);
             data.flag=true;
             data.cond_var.notify_all();
         }
@@ -57,7 +59,7 @@ void do_test_condition_notify_all_wakes_from_wait_with_predicate()
         }
 
         {
-            boost::mutex::scoped_lock lock(data.mutex);
+            boost::unique_lock<boost::mutex> lock(data.mutex);
             data.flag=true;
             data.cond_var.notify_all();
         }
@@ -86,7 +88,7 @@ void do_test_condition_notify_all_wakes_from_timed_wait()
         }
 
         {
-            boost::mutex::scoped_lock lock(data.mutex);
+            boost::unique_lock<boost::mutex> lock(data.mutex);
             data.flag=true;
             data.cond_var.notify_all();
         }
@@ -115,7 +117,7 @@ void do_test_condition_notify_all_wakes_from_timed_wait_with_predicate()
         }
 
         {
-            boost::mutex::scoped_lock lock(data.mutex);
+            boost::unique_lock<boost::mutex> lock(data.mutex);
             data.flag=true;
             data.cond_var.notify_all();
         }
@@ -144,7 +146,7 @@ void do_test_condition_notify_all_wakes_from_relative_timed_wait_with_predicate(
         }
 
         {
-            boost::mutex::scoped_lock lock(data.mutex);
+            boost::unique_lock<boost::mutex> lock(data.mutex);
             data.flag=true;
             data.cond_var.notify_all();
         }
@@ -167,11 +169,11 @@ namespace
 
     void wait_for_condvar_and_increase_count()
     {
-        boost::mutex::scoped_lock lk(multiple_wake_mutex);
+        boost::unique_lock<boost::mutex> lk(multiple_wake_mutex);
         multiple_wake_cond.wait(lk);
         ++multiple_wake_count;
     }
-    
+
 }
 
 
@@ -189,9 +191,9 @@ void do_test_notify_all_following_notify_one_wakes_all_threads()
     multiple_wake_cond.notify_one();
     multiple_wake_cond.notify_all();
     boost::this_thread::sleep(boost::posix_time::milliseconds(200));
-    
+
     {
-        boost::mutex::scoped_lock lk(multiple_wake_mutex);
+        boost::unique_lock<boost::mutex> lk(multiple_wake_mutex);
         BOOST_CHECK(multiple_wake_count==3);
     }
 
@@ -211,12 +213,25 @@ void test_condition_notify_all()
 }
 
 
-boost::unit_test_framework::test_suite* init_unit_test_suite(int, char*[])
+boost::unit_test::test_suite* init_unit_test_suite(int, char*[])
 {
-    boost::unit_test_framework::test_suite* test =
+    boost::unit_test::test_suite* test =
         BOOST_TEST_SUITE("Boost.Threads: condition test suite");
 
     test->add(BOOST_TEST_CASE(&test_condition_notify_all));
 
     return test;
+}
+
+void remove_unused_warning()
+{
+
+  //../../../boost/test/results_collector.hpp:40:13: warning: unused function 'first_failed_assertion' [-Wunused-function]
+  //(void)first_failed_assertion;
+
+  //../../../boost/test/tools/floating_point_comparison.hpp:304:25: warning: unused variable 'check_is_close' [-Wunused-variable]
+  //../../../boost/test/tools/floating_point_comparison.hpp:326:25: warning: unused variable 'check_is_small' [-Wunused-variable]
+  (void)boost::test_tools::check_is_close;
+  (void)boost::test_tools::check_is_small;
+
 }

@@ -1,7 +1,7 @@
 // Copyright (C) 2001-2003
 // William E. Kempf
 //
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/thread/mutex.hpp>
@@ -41,7 +41,7 @@ char* player_name(int state)
 
 void player(void* param)
 {
-    boost::mutex::scoped_lock lock(mutex);
+    boost::unique_lock<boost::mutex> lock(mutex);
 
     int active = (int)param;
     int other = active == PLAYER_A ? PLAYER_B : PLAYER_A;
@@ -104,11 +104,11 @@ int main(int argc, char* argv[])
     boost::thread thrdb(thread_adapter(&player, (void*)PLAYER_B));
 
     boost::xtime xt;
-    boost::xtime_get(&xt, boost::TIME_UTC);
+    boost::xtime_get(&xt, boost::TIME_UTC_);
     xt.sec += 1;
     boost::thread::sleep(xt);
     {
-        boost::mutex::scoped_lock lock(mutex);
+        boost::unique_lock<boost::mutex> lock(mutex);
         std::cout << "---Noise ON..." << std::endl;
     }
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
         cond.notify_all();
 
     {
-        boost::mutex::scoped_lock lock(mutex);
+        boost::unique_lock<boost::mutex> lock(mutex);
         std::cout << "---Noise OFF..." << std::endl;
         state = GAME_OVER;
         cond.notify_all();

@@ -3,8 +3,6 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../helpers/prefix.hpp"
-
 #include "./containers.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
@@ -13,7 +11,7 @@
 #pragma warning(disable:4512) // assignment operator could not be generated
 #endif
 
-test::seed_t seed(9387);
+test::seed_t initialize_seed(9387);
 
 template <class T>
 struct self_swap_base : public test::exception_base
@@ -27,13 +25,12 @@ struct self_swap_base : public test::exception_base
     void check BOOST_PREVENT_MACRO_SUBSTITUTION(T const& x) const {
         std::string scope(test::scope);
 
-#if BOOST_UNORDERED_SWAP_METHOD != 2
+        // TODO: In C++11 exceptions are only allowed in the swap function.
         BOOST_TEST(
-                scope == "hash::operator(hash)" ||
+                scope == "hash::hash(hash)" ||
                 scope == "hash::operator=(hash)" ||
-                scope == "equal_to::operator(equal_to)" ||
+                scope == "equal_to::equal_to(equal_to)" ||
                 scope == "equal_to::operator=(equal_to)");
-#endif
 
         test::check_equivalent_keys(x);
     }
@@ -63,7 +60,9 @@ struct swap_base : public test::exception_base
         initial_x(x_values.begin(), x_values.end(), 0, hasher(tag1),
                 key_equal(tag1), allocator_type(tag1)),
         initial_y(y_values.begin(), y_values.end(), 0, hasher(tag2),
-                key_equal(tag2), allocator_type(tag2))
+                key_equal(tag2), allocator_type(
+                    T::allocator_type::propagate_on_container_swap::value ?
+                        tag2 : tag1))
     {}
 
     struct data_type {
@@ -74,6 +73,7 @@ struct swap_base : public test::exception_base
     };
 
     data_type init() const { return data_type(initial_x, initial_y); }
+
     void run(data_type& d) const {
         try {
             d.x.swap(d.y);
@@ -82,13 +82,12 @@ struct swap_base : public test::exception_base
     void check BOOST_PREVENT_MACRO_SUBSTITUTION(data_type const& d) const {
         std::string scope(test::scope);
 
-#if BOOST_UNORDERED_SWAP_METHOD != 2
+        // TODO: In C++11 exceptions are only allowed in the swap function.
         BOOST_TEST(
-                scope == "hash::operator(hash)" ||
+                scope == "hash::hash(hash)" ||
                 scope == "hash::operator=(hash)" ||
-                scope == "equal_to::operator(equal_to)" ||
+                scope == "equal_to::equal_to(equal_to)" ||
                 scope == "equal_to::operator=(equal_to)");
-#endif
         
         test::check_equivalent_keys(d.x);
         test::check_equivalent_keys(d.y);
@@ -119,7 +118,8 @@ struct swap_test4 : swap_base<T>
     swap_test4() : swap_base<T>(10, 10, 1, 2) {}
 };
 
-RUN_EXCEPTION_TESTS(
+EXCEPTION_TESTS(
     (self_swap_test1)(self_swap_test2)
     (swap_test1)(swap_test2)(swap_test3)(swap_test4),
     CONTAINER_SEQ)
+RUN_TESTS()

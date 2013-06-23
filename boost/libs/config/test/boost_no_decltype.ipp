@@ -7,11 +7,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_DECLTYPE
+//  MACRO:         BOOST_NO_CXX11_DECLTYPE
 //  TITLE:         C++0x decltype unavailable
 //  DESCRIPTION:   The compiler does not support C++0x decltype
 
-namespace boost_no_decltype {
+namespace boost_no_cxx11_decltype {
+
+void quiet_warning(int){}
 
 struct test_class
 {
@@ -39,8 +41,13 @@ int test()
 {
   int i;
   decltype(i) j;
+//  quiet_warning(j);
   decltype(get_test_class()) k;
+  #ifndef _MSC_VER 
+  // Although the VC++ decltype is buggy, we none the less enable support, 
+  // so don't test the bugs for now!
   baz(get_test_class);
+  #endif
   return 0;
 }
 

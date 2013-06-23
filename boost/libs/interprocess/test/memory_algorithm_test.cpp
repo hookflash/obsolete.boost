@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2006. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2006-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -15,6 +15,7 @@
 #include <boost/interprocess/indexes/null_index.hpp>
 #include <boost/interprocess/sync/mutex_family.hpp>
 #include <boost/interprocess/detail/type_traits.hpp>
+#include <boost/type_traits/alignment_of.hpp>
 #include "memory_algorithm_test_template.hpp"
 #include <iostream>
 #include <string>
@@ -22,7 +23,7 @@
 
 using namespace boost::interprocess;
 
-const int memsize = 16384;
+const int Memsize = 16384;
 const char *const shMemName = test::get_process_id_name();
 
 int test_simple_seq_fit()
@@ -36,7 +37,7 @@ int test_simple_seq_fit()
 
    //Create shared memory
    shared_memory_object::remove(shMemName);
-   my_managed_shared_memory segment(create_only, shMemName, memsize);
+   my_managed_shared_memory segment(create_only, shMemName, Memsize);
 
    //Now take the segment manager and launch memory test
    if(!test::test_all_allocation(*segment.get_segment_manager())){
@@ -57,7 +58,7 @@ int test_rbtree_best_fit()
 
    //Create shared memory
    shared_memory_object::remove(shMemName);
-   my_managed_shared_memory segment(create_only, shMemName, memsize);
+   my_managed_shared_memory segment(create_only, shMemName, Memsize);
 
    //Now take the segment manager and launch memory test
    if(!test::test_all_allocation(*segment.get_segment_manager())){
@@ -68,7 +69,8 @@ int test_rbtree_best_fit()
 
 int main ()
 {
-   const std::size_t void_ptr_align = detail::alignment_of<void*>::value;
+   const std::size_t void_ptr_align = ::boost::alignment_of<offset_ptr<void> >::value;
+
    if(test_simple_seq_fit()){
       return 1;
    }

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2006-2009. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2006-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -25,7 +25,7 @@ int main ()
          );
 
       unsigned int priority;
-      std::size_t recvd_size;
+      message_queue::size_type recvd_size;
 
       //Receive 100 numbers
       for(int i = 0; i < 100; ++i){

@@ -4,9 +4,10 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "../helpers/prefix.hpp"
-
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include "../helpers/postfix.hpp"
+
 #include <boost/preprocessor/seq.hpp>
 #include <list>
 #include "../helpers/test.hpp"
@@ -136,15 +137,25 @@ namespace equality_tests
         UNORDERED_EQUALITY_MULTIMAP_TEST(
             ((1)(1))((1)(1)), !=, ((1)(1))((1)(2)))
         UNORDERED_EQUALITY_MULTIMAP_TEST(
-            ((1)(2))((1)(1)), !=, ((1)(1))((1)(2)))
+            ((1)(2))((1)(1)), ==, ((1)(1))((1)(2)))
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((1)(2))((1)(1)), !=, ((1)(1))((1)(3)))
     }
 
     UNORDERED_AUTO_TEST(equality_predicate_test)
     {
         UNORDERED_EQUALITY_SET_TEST(
-            (1), ==, (1001))
+            (1), !=, (1001))
         UNORDERED_EQUALITY_MAP_TEST(
-            ((1)(2))((1001)(1)), ==, ((1001)(2))((1)(1)))
+            ((1)(2))((1001)(1)), !=, ((1001)(2))((1)(1)))
+    }
+
+    UNORDERED_AUTO_TEST(equality_multiple_group_test)
+    {
+        UNORDERED_EQUALITY_MULTISET_TEST(
+            (1)(1)(1)(1001)(2001)(2001)(2)(1002)(3)(1003)(2003), ==,
+            (3)(1003)(2003)(1002)(2)(2001)(2001)(1)(1001)(1)(1)
+        );
     }
 
     // Test that equality still works when the two containers have
@@ -165,7 +176,6 @@ namespace equality_tests
         set1.insert(20); set2.insert(10);
         BOOST_TEST(set1 == set2);
     }
-
 }
 
 RUN_TESTS()
