@@ -1,1 +1,5 @@
 .DS_Store
+ios/
+osx/
+src/boost_1_54_0
+*.tar.bz2
