@@ -2,7 +2,7 @@ Boost iOS/OSX compilation
 =====
 
 ### C/CXX flags:
-* -DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++11
+* -std=c++11
 * -fvisibility=hidden -fvisibility-inlines-hidden
 * -stdlib=libc++ -- GNU STL C++ lib
 

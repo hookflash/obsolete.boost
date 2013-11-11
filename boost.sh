@@ -19,13 +19,16 @@
 # same directory as this script, and run "./boost.sh". Grab a cuppa. And voila.
 #===============================================================================
 
-: ${BOOST_LIBS:="random regex graph random chrono thread signals filesystem system date_time"}
+: ${BOOST_LIBS:="atomic random regex graph random chrono thread signals filesystem system date_time"}
 : ${IPHONE_SDKVERSION:=`xcodebuild -showsdks | grep iphoneos | egrep "[[:digit:]]+\.[[:digit:]]+" -o | tail -1`}
 : ${OSX_SDKVERSION:=10.8}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
-: ${EXTRA_CPPFLAGS:="-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++11 -stdlib=libc++"}
+: ${EXTRA_CPPFLAGS:="-std=c++11 -stdlib=libc++"}
 
-# The EXTRA_CPPFLAGS definition works around a thread race issue in
+# WARNING
+#
+# Use "-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS" in the
+# EXTRA_CPPFLAGS definition to work around a thread race issue in
 # shared_ptr. I encountered this historically and have not verified that
 # the fix is no longer required. Without using the posix thread primitives
 # an invalid compare-and-swap ARM instruction (non-thread-safe) was used for the
@@ -42,8 +45,8 @@
 : ${OSXFRAMEWORKDIR:=`pwd`/osx/framework}
 : ${COMPILER:="clang++"}
 
-: ${BOOST_VERSION:=1.54.0}
-: ${BOOST_VERSION2:=1_54_0}
+: ${BOOST_VERSION:=1.53.0}
+: ${BOOST_VERSION2:=1_53_0}
 
 BOOST_TARBALL=$TARBALLDIR/boost_$BOOST_VERSION2.tar.bz2
 BOOST_SRC=$SRCDIR/boost_${BOOST_VERSION2}
@@ -108,6 +111,20 @@ downloadBoost()
 
 #===============================================================================
 
+downloadPatch()
+{
+    if [ "${BOOST_VERSION}" = "1.54.0" ]; then
+        if [ ! -s $TARBALLDIR/boost-1.54.0-thread-link_atomic.patch ]; then
+            echo "Downloading patches for boost ${BOOST_VERSION}"
+            curl -L -o $TARBALLDIR/boost-1.54.0-thread-link_atomic.patch https://svn.boost.org/trac/boost/raw-attachment/ticket/9041/boost-1.54.0-thread-link_atomic.patch
+        fi
+    fi
+
+    doneSection
+}
+
+#===============================================================================
+
 unpackBoost()
 {
     [ -f "$BOOST_TARBALL" ] || abort "Source tarball missing."
@@ -117,6 +134,27 @@ unpackBoost()
     [ -d $SRCDIR ]    || mkdir -p $SRCDIR
     [ -d $BOOST_SRC ] || ( cd $SRCDIR; tar xfj $BOOST_TARBALL )
     [ -d $BOOST_SRC ] && echo "    ...unpacked as $BOOST_SRC"
+
+    doneSection
+}
+
+#===============================================================================
+
+applyBoostPatch()
+{
+    if [ "${BOOST_VERSION}" = "1.54.0" ]; then
+        if [ ! -s "$SRCDIR/boost-1.54.0-thread-link_atomic.patch" ]; then
+            echo Copying patch into $SRCDIR...
+
+            [ -f "$TARBALLDIR/boost-1.54.0-thread-link_atomic.patch" ] || abort "Source patch is missing."
+
+            cp "$TARBALLDIR/boost-1.54.0-thread-link_atomic.patch" "$SRCDIR/boost-1.54.0-thread-link_atomic.patch"
+
+            pushd "$SRCDIR"
+            patch -p0 < boost-1.54.0-thread-link_atomic.patch
+            popd
+        fi
+    fi
 
     doneSection
 }
@@ -290,6 +328,7 @@ buildFramework()
     echo "Framework: Creating symlinks..."
     ln -s $FRAMEWORK_VERSION               $FRAMEWORK_BUNDLE/Versions/Current
     ln -s Versions/Current/Headers         $FRAMEWORK_BUNDLE/Headers
+    ln -s .                                $FRAMEWORK_BUNDLE/Headers/boost
     ln -s Versions/Current/Resources       $FRAMEWORK_BUNDLE/Resources
     ln -s Versions/Current/Documentation   $FRAMEWORK_BUNDLE/Documentation
     ln -s Versions/Current/$FRAMEWORK_NAME $FRAMEWORK_BUNDLE/$FRAMEWORK_NAME
@@ -352,7 +391,9 @@ echo "COMPILER:          $COMPILER"
 echo
 
 downloadBoost
+#downloadPatch
 unpackBoost
+#applyBoostPatch
 #inventMissingHeaders
 bootstrapBoost
 updateBoost
