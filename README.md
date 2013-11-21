@@ -2,9 +2,8 @@ Boost iOS/OSX compilation
 =====
 
 ### C/CXX flags:
-* -std=c++11
+* -std=gnu++11 -stdlib=libstdc++
 * -fvisibility=hidden -fvisibility-inlines-hidden
-* -stdlib=libc++ -- GNU STL C++ lib
 
 ### Framework
 * iOS universal build including: armv6/armv7/armv7s/i386 - needs latest XCode (4.6+)
