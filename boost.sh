@@ -19,7 +19,7 @@
 # same directory as this script, and run "./boost.sh". Grab a cuppa. And voila.
 #===============================================================================
 
-: ${BOOST_LIBS:="atomic random regex graph random chrono thread signals filesystem system date_time"}
+: ${BOOST_LIBS:="regex thread system date_time"}
 : ${IPHONE_SDKVERSION:=`xcodebuild -showsdks | grep iphoneos | egrep "[[:digit:]]+\.[[:digit:]]+" -o | tail -1`}
 : ${OSX_SDKVERSION:=10.8}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
@@ -45,7 +45,9 @@
 : ${OSXBUILDDIR:=`pwd`/osx/build}
 : ${PREFIXDIR:=`pwd`/ios/prefix}
 : ${IOSFRAMEWORKDIR:=`pwd`/ios/framework}
+: ${IOSLIBRARYDIR:=`pwd`/ios/library}
 : ${OSXFRAMEWORKDIR:=`pwd`/osx/framework}
+: ${OSXLIBRARYDIR:=`pwd`/osx/library}
 : ${COMPILER:="clang++"}
 
 : ${BOOST_VERSION:=1.53.0}
@@ -307,6 +309,7 @@ buildFramework()
     : ${1:?}
     FRAMEWORKDIR=$1
     BUILDDIR=$2
+    LIBRARYDIR=$3
 
     VERSION_TYPE=Alpha
     FRAMEWORK_NAME=boost
@@ -319,6 +322,7 @@ buildFramework()
     echo "Framework: Building $FRAMEWORK_BUNDLE from $BUILDDIR..."
 
     rm -rf $FRAMEWORK_BUNDLE
+    rm -rf "$LIBRARYDIR/FRAMEWORK_NAME.a"
 
     echo "Framework: Setting up directories..."
     mkdir -p $FRAMEWORK_BUNDLE
@@ -327,6 +331,7 @@ buildFramework()
     mkdir -p $FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/Resources
     mkdir -p $FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/Headers
     mkdir -p $FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/Documentation
+	mkdir -p $LIBRARYDIR
 
     echo "Framework: Creating symlinks..."
     ln -s $FRAMEWORK_VERSION               $FRAMEWORK_BUNDLE/Versions/Current
@@ -336,11 +341,13 @@ buildFramework()
     ln -s Versions/Current/Documentation   $FRAMEWORK_BUNDLE/Documentation
     ln -s Versions/Current/$FRAMEWORK_NAME $FRAMEWORK_BUNDLE/$FRAMEWORK_NAME
 
-    FRAMEWORK_INSTALL_NAME=$FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/$FRAMEWORK_NAME
+    FRAMEWORK_INSTALL_NAME="$FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/$FRAMEWORK_NAME.a"
+    LIBRARY_INSTALL_NAME="$LIBRARYDIR/$FRAMEWORK_NAME.a"
 
     echo "Lipoing library into $FRAMEWORK_INSTALL_NAME..."
     $ARM_DEV_CMD lipo -create $BUILDDIR/*/libboost.a -o "$FRAMEWORK_INSTALL_NAME" || abort "Lipo $1 failed"
-
+	$ARM_DEV_CMD lipo -create $BUILDDIR/*/libboost.a -o "$LIBRARY_INSTALL_NAME" || abort "Lipo $1 failed"
+	
     echo "Framework: Copying includes..."
     cp -r $PREFIXDIR/include/boost/*  $FRAMEWORK_BUNDLE/Headers/
 
@@ -387,7 +394,9 @@ echo "IOSBUILDDIR:       $IOSBUILDDIR"
 echo "OSXBUILDDIR:       $OSXBUILDDIR"
 echo "PREFIXDIR:         $PREFIXDIR"
 echo "IOSFRAMEWORKDIR:   $IOSFRAMEWORKDIR"
+echo "IOSLIBRARYDIR:   	 $IOSLIBRARYDIR"
 echo "OSXFRAMEWORKDIR:   $OSXFRAMEWORKDIR"
+echo "OSXLIBRARYDIR:   	 $OSXLIBRARYDIR"
 echo "IPHONE_SDKVERSION: $IPHONE_SDKVERSION"
 echo "XCODE_ROOT:        $XCODE_ROOT"
 echo "COMPILER:          $COMPILER"
@@ -402,8 +411,8 @@ bootstrapBoost
 updateBoost
 buildBoostForIPhoneOS
 scrunchAllLibsTogetherInOneLibPerPlatform
-buildFramework $IOSFRAMEWORKDIR $IOSBUILDDIR
-buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR
+buildFramework $IOSFRAMEWORKDIR $IOSBUILDDIR $IOSLIBRARYDIR
+buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR $OSXLIBRARYDIR
 
 restoreBoost
 
