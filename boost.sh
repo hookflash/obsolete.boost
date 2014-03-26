@@ -340,6 +340,7 @@ buildFramework()
     ln -s Versions/Current/Resources       $FRAMEWORK_BUNDLE/Resources
     ln -s Versions/Current/Documentation   $FRAMEWORK_BUNDLE/Documentation
     ln -s Versions/Current/$FRAMEWORK_NAME $FRAMEWORK_BUNDLE/$FRAMEWORK_NAME
+    ln -s "$FRAMEWORK_NAME.a"              $FRAMEWORK_BUNDLE/Versions/Current/$FRAMEWORK_NAME
 
     FRAMEWORK_INSTALL_NAME="$FRAMEWORK_BUNDLE/Versions/$FRAMEWORK_VERSION/$FRAMEWORK_NAME.a"
     LIBRARY_INSTALL_NAME="$LIBRARYDIR/$FRAMEWORK_NAME.a"
