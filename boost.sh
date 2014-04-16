@@ -181,7 +181,7 @@ updateBoost()
 
     cat >> $BOOST_SRC/tools/build/v2/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphone
-: $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv6 -arch armv7 -arch armv7s -fvisibility=hidden -fvisibility-inlines-hidden -std=$STD_FLAG -stdlib=$STDLIB_FLAG $EXTRA_CPPFLAGS
+: $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv6 -arch armv7 -arch armv7s -arch arm64 -fvisibility=hidden -fvisibility-inlines-hidden -std=$STD_FLAG -stdlib=$STDLIB_FLAG $EXTRA_CPPFLAGS
 : <striper> <root>$XCODE_ROOT/Platforms/iPhoneOS.platform/Developer
 : <architecture>arm <target-os>iphone
 ;
@@ -248,6 +248,7 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
     mkdir -p $IOSBUILDDIR/armv7/obj
     mkdir -p $IOSBUILDDIR/armv7s/obj
     mkdir -p $IOSBUILDDIR/i386/obj
+    mkdir -p $IOSBUILDDIR/arm64/obj
 
     mkdir -p $OSXBUILDDIR/i386/obj
     mkdir -p $OSXBUILDDIR/x86_64/obj
@@ -262,7 +263,8 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         $ARM_DEV_CMD lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin armv6 -o $IOSBUILDDIR/armv6/libboost_$NAME.a
         $ARM_DEV_CMD lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin armv7 -o $IOSBUILDDIR/armv7/libboost_$NAME.a
         $ARM_DEV_CMD lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin armv7s -o $IOSBUILDDIR/armv7s/libboost_$NAME.a
-
+		$ARM_DEV_CMD lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin arm64 -o $IOSBUILDDIR/arm64/libboost_$NAME.a
+		
         cp "iphonesim-build/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/i386/
 
         $ARM_DEV_CMD lipo "osx-build/stage/lib/libboost_$NAME.a" -thin i386 -o $OSXBUILDDIR/i386/libboost_$NAME.a
@@ -276,6 +278,7 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         (cd $IOSBUILDDIR/armv6/obj; ar -x ../$NAME );
         (cd $IOSBUILDDIR/armv7/obj; ar -x ../$NAME );
         (cd $IOSBUILDDIR/armv7s/obj; ar -x ../$NAME );
+        (cd $IOSBUILDDIR/arm64/obj; ar -x ../$NAME );
         (cd $IOSBUILDDIR/i386/obj; ar -x ../$NAME );
 
         (cd $OSXBUILDDIR/i386/obj; ar -x ../$NAME );
@@ -292,6 +295,8 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
     (cd $IOSBUILDDIR/armv7; $ARM_DEV_CMD ar crus libboost.a obj/*.o; )
     echo ...armv7s
     (cd $IOSBUILDDIR/armv7s; $ARM_DEV_CMD ar crus libboost.a obj/*.o; )
+    echo ...arm64
+    (cd $IOSBUILDDIR/arm64; $ARM_DEV_CMD ar crus libboost.a obj/*.o; )
     echo ...i386
     (cd $IOSBUILDDIR/i386;  $SIM_DEV_CMD ar crus libboost.a obj/*.o; )
 
