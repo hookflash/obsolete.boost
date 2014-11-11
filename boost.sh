@@ -24,8 +24,8 @@
 : ${OSX_SDKVERSION:=10.8}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
 : ${EXTRA_CPPFLAGS:=""}
-: ${STD_FLAG:="gnu++11"}
-: ${STDLIB_FLAG:="libstdc++"}
+: ${STD_FLAG:="c++11"}
+: ${STDLIB_FLAG:="libc++"}
 
 #
 # WARNING
